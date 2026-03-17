@@ -92,6 +92,12 @@ public class Tarea {
 
 	public void setFechaInicio(LocalDate fechaInicio) {
 		
+		if(fechaInicio == null) {
+			
+			throw new FechaInicioException("ERROR. La fecha de inicio introducida no puede ser nula.");
+			
+		}
+		
 		if(fechaInicio.isBefore(LocalDate.now())) {
 			
 			throw new FechaInicioException("ERROR. La fecha de inicio no puede ser anterior a la de hoy.");
@@ -107,6 +113,18 @@ public class Tarea {
 
 	public void setFechaFin(LocalDate fechaFin) {
 		
+		if(fechaFin == null) {
+			
+			throw new FechaFinException("ERROR. La fecha de fin introducida no puede ser nula.");
+			
+		}
+		
+		if(this.fechaInicio == null) {
+			
+			throw new FechaFinException("ERROR. Debe existir una fecha de inicio.");
+			
+		}
+		
 		if(fechaFin.isBefore(this.fechaInicio)) {
 			
 			throw new FechaFinException("ERROR. La fecha de fin no puede ser anterior a la de inicio");
@@ -115,7 +133,6 @@ public class Tarea {
 		
 		this.fechaFin = fechaFin;
 	}
-	
 	
 	
 }

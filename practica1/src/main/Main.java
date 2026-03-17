@@ -1,9 +1,13 @@
 package main;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import exceptions.FechaFinException;
+import exceptions.FechaInicioException;
 import exceptions.InvalidTareaDataException;
 import exceptions.PrioridadInvalidaException;
 import exceptions.TareaStateException;
@@ -16,6 +20,9 @@ public class Main {
 		//ESCÁNER
 		Scanner sc = new Scanner(System.in);
 
+		//FORMATO FECHA
+		DateTimeFormatter formatoFecha = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		
 		//ATRIBUTOS
 		String nombre;
 		String estado;
@@ -45,8 +52,6 @@ public class Main {
 				t.setNombre(nombre);
 				nombreValido = true;
 				
-				sc.reset();
-				
 			}
 			catch(InvalidTareaDataException ex) {
 				
@@ -68,8 +73,6 @@ public class Main {
 				t.setEstado(estado);
 				estadoValido = true;
 				
-				sc.reset();
-				
 			}
 			catch(TareaStateException ex) {
 				
@@ -87,6 +90,8 @@ public class Main {
 				
 				System.out.println("Introduce la prioridad de la tarea: ");
 				prioridad = sc.nextInt();
+				
+				sc.nextLine();
 				
 				t.setPrioridad(prioridad);
 				prioridadValida = true;
@@ -107,8 +112,60 @@ public class Main {
 		}while(!prioridadValida);
 
 
+		//DO FECHA INICIO
+		do {
+			
+			try {
+				
+				System.out.println("Introduce la fecha de inicio de la tarea: ");
+				fechaInicio = LocalDate.parse(sc.nextLine(), formatoFecha);
+				
+				t.setFechaInicio(fechaInicio);
+				fechaInicioValida = true;
+				
+			}
+			catch(DateTimeParseException ex) {
+				
+				System.out.println("ERROR. La fecha ha sido introducida en un formato erróneo.");
+				
+			}
+			catch(FechaInicioException fex) {
+				
+				System.out.println(fex.getMessage());
+				
+			}
+			
+		}while(!fechaInicioValida);
 
 		
+		//DO FECHA FIN
+		do {
+			
+			try {
+				
+				System.out.println("Introduce la fecha de fin de la tarea: ");
+				fechaFin = LocalDate.parse(sc.nextLine(), formatoFecha);
+				
+				t.setFechaFin(fechaFin);
+				fechaFinValida = true;
+				
+			}
+			catch(DateTimeParseException ex) {
+				
+				System.out.println("ERROR. La fecha ha sido introducida en un formato erróneo.");
+				
+			}
+			catch(FechaFinException fex) {
+				
+				System.out.println(fex.getMessage());
+				
+			}
+			
+		}while(!fechaFinValida);
+		
+		System.out.printf("La tarea \"%s\" ha sido registrada con éxito.", t.getNombre());
+		
+		sc.close();
 		
 	}
 
